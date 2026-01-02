@@ -13,7 +13,7 @@ window.EVENTS = [
 
   // Content deadlines
   { date: "2026-01-15", type: "deadline", title: "Create email list system draft (Verre + Gaming site)" },
-  { date: "2026-01-18", type: "deadline", title: "Edited DJ set videos ready for TikTok (batch upload)" },
+  { date: "2026-01-18", type: "deadline", title: "Edited DJ set videos (batch upload)" },
 
   // Remix release (mid-month)
   { date: "2026-01-18", type: "deadline", title: "Release Panic! remix (goal)" },
