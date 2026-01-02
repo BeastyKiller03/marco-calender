@@ -3,44 +3,65 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Marco + Jess — Calendar</title>
+  <title>Marco + Jess — Planner</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="wrap">
     <header class="top">
       <div class="title">
-        <div class="h1">Calendar</div>
-        <div class="sub">Marco + Jess • recurring routines + deadlines</div>
+        <div class="h1">Planner</div>
+        <div class="sub">Monthly calendar • routines + deadlines • notes</div>
       </div>
 
       <div class="controls">
         <button id="prevBtn" class="btn" type="button">← Prev</button>
         <div id="monthLabel" class="monthLabel">—</div>
         <button id="nextBtn" class="btn" type="button">Next →</button>
+        <button id="printBtn" class="btn btn-ghost" type="button">Print / PDF</button>
       </div>
     </header>
 
-    <main>
-      <div class="dow">
-        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-      </div>
-
-      <div id="grid" class="grid"></div>
-
-      <footer class="footer">
-        <div class="legend">
-          <span class="pill pill-meal">Meal</span>
-          <span class="pill pill-studio">Studio</span>
-          <span class="pill pill-admin">Verre Admin</span>
-          <span class="pill pill-deadline">Deadline</span>
-          <span class="pill pill-life">Life</span>
+    <main class="layout">
+      <section class="calendar">
+        <div class="dow">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
 
-        <div class="note">
-          Edit recurring weekly routines in <code>rules.js</code> and one-off events in <code>events.js</code>.
+        <div id="grid" class="grid"></div>
+      </section>
+
+      <aside class="side">
+        <div class="sideCard">
+          <div class="sideHead">
+            <div class="sideTitle">Day Notes</div>
+            <div id="selectedDateLabel" class="sideDate">Select a day</div>
+          </div>
+
+          <textarea id="notesBox" class="notesBox" placeholder="Write notes for this day… (saved on this device)"></textarea>
+
+          <div class="sideActions">
+            <button id="clearNotesBtn" class="btn btn-small btn-ghost" type="button">Clear notes</button>
+            <div class="hint">Tip: click a day → notes autosave</div>
+          </div>
         </div>
-      </footer>
+
+        <div class="sideCard">
+          <div class="sideTitle">Legend</div>
+          <div class="legend">
+            <span class="pill pill-meal">🍱 Meal</span>
+            <span class="pill pill-studio">🎧 Studio</span>
+            <span class="pill pill-admin">🖥️ Verre</span>
+            <span class="pill pill-deadline">⏳ Deadline</span>
+            <span class="pill pill-life">🌿 Life</span>
+          </div>
+
+          <div class="hint2">
+            Edit weekly routines in <code>rules.js</code><br/>
+            Edit one-off events in <code>events.js</code>
+          </div>
+        </div>
+      </aside>
     </main>
   </div>
 
