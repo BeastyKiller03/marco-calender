@@ -1,25 +1,23 @@
-// Month = 1 for January (normal human month)
+// events.js
+// Use YYYY-MM-DD dates.
+// type: meal | studio | admin | deadline | life
 window.EVENTS = [
-  // Weekly repeating intentions (you can comment these out if too busy)
-  { date: "2026-01-04", type:"meal", title:"Meal prep (Sun)" },
-  { date: "2026-01-06", type:"meal", title:"Meal prep (Tue)" },
-  { date: "2026-01-05", type:"studio", title:"Whittier studio (Mon)" },
-  { date: "2026-01-07", type:"studio", title:"Whittier studio (Wed / Day off)" },
-  { date: "2026-01-08", type:"admin", title:"Verre admin catch-up (Thu)" },
-  { date: "2026-01-09", type:"admin", title:"Verre admin catch-up (Fri)" },
+  // Jan 2026: starts Thu 1st and ends Sat 31st (this calendar will render it correctly)
 
-  // Big resets
-  { date: "2026-01-03", type:"life", title:"Deep clean car + living room reset" },
+  // Reset / clean
+  { date: "2026-01-03", type: "life", title: "Reset clean: deep clean car + living room (move/sell furniture)" },
 
-  // Mid-month system setup
-  { date: "2026-01-14", type:"life", title:"Set up joint checking + savings (you + Jess)" },
+  // Joint accounts mid-January
+  { date: "2026-01-14", type: "life", title: "Set up joint checking + joint savings (you + Jess)" },
 
-  // Deadlines
-  { date: "2026-01-17", type:"deadline", title:"Edited DJ clips ready (TikTok)" },
-  { date: "2026-01-17", type:"deadline", title:"Release Panic! remix (goal)" },
-  { date: "2026-01-18", type:"deadline", title:"Draft email list system (Verre + Gaming)" },
+  // Content deadlines
+  { date: "2026-01-15", type: "deadline", title: "Create email list system draft (Verre + Gaming site)" },
+  { date: "2026-01-18", type: "deadline", title: "Edited DJ set videos ready for TikTok (batch upload)" },
 
-  // End of month goals
-  { date: "2026-01-31", type:"deadline", title:"Verre website near-ready" },
-  { date: "2026-01-31", type:"deadline", title:"2 songs mixed/mastered (EP)" },
+  // Remix release (mid-month)
+  { date: "2026-01-18", type: "deadline", title: "Release Panic! remix (goal)" },
+
+  // End-of-month targets
+  { date: "2026-01-31", type: "deadline", title: "Verre website near-ready (domain + artists/photos/descriptions)" },
+  { date: "2026-01-31", type: "deadline", title: "2 EP songs fully mixed/mastered (goal)" },
 ];
