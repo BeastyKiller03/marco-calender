@@ -1,100 +1,146 @@
 :root{
-  --bg:#0b0b0c;
-  --card:#121214;
-  --fg:#f2f2f2;
-  --muted:#a7a7ad;
-  --line:#242428;
+  --bg:#f8fafc;           /* soft off-white */
+  --card:#ffffff;
+  --fg:#0f172a;           /* deep slate text */
+  --muted:#64748b;        /* calm gray */
+  --line:#e2e8f0;
 
-  --meal:#67e8f9;
-  --studio:#c4b5fd;
-  --admin:#86efac;
-  --deadline:#fca5a5;
-  --life:#fde68a;
+  --meal:#22c55e;         /* green */
+  --studio:#6366f1;       /* indigo */
+  --admin:#0ea5e9;        /* sky blue */
+  --deadline:#ef4444;     /* soft red */
+  --life:#f59e0b;         /* warm amber */
 }
 
 *{ box-sizing:border-box; }
-html,body{ margin:0; padding:0; background:var(--bg); color:var(--fg); font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif; }
-code{ color:var(--muted); }
 
-.wrap{ max-width:1100px; margin:0 auto; padding:18px; }
-
-.top{
-  display:flex; align-items:flex-end; justify-content:space-between;
-  gap:12px; padding:10px 6px 18px 6px;
-  border-bottom:1px solid var(--line);
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-.h1{ font-size:28px; letter-spacing:0.2px; }
-.sub{ font-size:13px; color:var(--muted); margin-top:4px; }
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:20px;
+}
+
+/* ---------- HEADER ---------- */
+
+.top{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  padding:10px 10px 18px;
+}
+
+.h1{
+  font-size:30px;
+  font-weight:700;
+  letter-spacing:0.2px;
+}
+
+.sub{
+  font-size:14px;
+  color:var(--muted);
+  margin-top:6px;
+}
 
 .controls{
-  display:flex; align-items:center; gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .monthLabel{
-  min-width:180px;
+  min-width:190px;
   text-align:center;
-  font-size:15px;
-  color:var(--muted);
+  font-size:16px;
+  font-weight:600;
+  color:var(--fg);
 }
 
 .btn{
   background:var(--card);
   color:var(--fg);
   border:1px solid var(--line);
-  padding:10px 12px;
-  border-radius:12px;
+  padding:10px 14px;
+  border-radius:14px;
   cursor:pointer;
+  font-size:14px;
+  transition: background 0.15s ease, transform 0.05s ease;
 }
-.btn:active{ transform:translateY(1px); }
+.btn:hover{
+  background:#f1f5f9;
+}
+.btn:active{
+  transform:translateY(1px);
+}
+
+/* ---------- DAYS OF WEEK ---------- */
 
 .dow{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:10px;
-  padding:14px 6px 10px 6px;
+  gap:12px;
+  padding:10px;
   color:var(--muted);
-  font-size:12px;
-  letter-spacing:0.6px;
-  text-transform:uppercase;
+  font-size:13px;
+  font-weight:600;
+  text-align:center;
 }
+
+/* ---------- CALENDAR GRID ---------- */
 
 .grid{
   display:grid;
   grid-template-columns:repeat(7,1fr);
-  gap:10px;
-  padding:0 6px;
+  gap:14px;
+  padding:10px;
 }
+
+/* ---------- DAY CELL ---------- */
 
 .cell{
   background:var(--card);
   border:1px solid var(--line);
-  border-radius:16px;
-  min-height:120px;
-  padding:10px;
+  border-radius:20px;
+  min-height:140px;
+  padding:12px;
   display:flex;
   flex-direction:column;
-  gap:8px;
-  overflow:hidden;
+  gap:10px;
+  box-shadow: 0 4px 14px rgba(15,23,42,0.03);
 }
 
 .cell.muted{
   opacity:0.35;
 }
 
+/* ---------- DATE HEADER ---------- */
+
 .dateRow{
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .dayNum{
-  font-size:14px;
-  color:var(--fg);
+  font-size:15px;
+  font-weight:700;
 }
 
 .badge{
-  font-size:11px;
+  font-size:12px;
   color:var(--muted);
 }
+
+/* ---------- EVENTS ---------- */
 
 .items{
   display:flex;
@@ -103,44 +149,85 @@ code{ color:var(--muted); }
 }
 
 .item{
-  font-size:12px;
-  padding:7px 8px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:#0f0f11;
-  line-height:1.25em;
+  font-size:13px;
+  padding:8px 10px;
+  border-radius:14px;
+  line-height:1.3em;
+  background:#f8fafc;
+  border-left:4px solid var(--line);
 }
 
-.item.meal{ border-color:color-mix(in oklab, var(--meal), #000 70%); }
-.item.studio{ border-color:color-mix(in oklab, var(--studio), #000 70%); }
-.item.admin{ border-color:color-mix(in oklab, var(--admin), #000 70%); }
-.item.deadline{ border-color:color-mix(in oklab, var(--deadline), #000 70%); }
-.item.life{ border-color:color-mix(in oklab, var(--life), #000 70%); }
+/* Color accents */
+.item.meal{
+  border-left-color:var(--meal);
+  background:#ecfdf5;
+}
+.item.studio{
+  border-left-color:var(--studio);
+  background:#eef2ff;
+}
+.item.admin{
+  border-left-color:var(--admin);
+  background:#f0f9ff;
+}
+.item.deadline{
+  border-left-color:var(--deadline);
+  background:#fef2f2;
+  font-weight:600;
+}
+.item.life{
+  border-left-color:var(--life);
+  background:#fffbeb;
+}
+
+/* ---------- FOOTER ---------- */
 
 .footer{
-  margin-top:18px;
-  padding:14px 6px 0 6px;
+  margin-top:22px;
+  padding:16px 10px 0;
   border-top:1px solid var(--line);
   display:flex;
-  align-items:flex-start;
   justify-content:space-between;
-  gap:14px;
+  align-items:flex-start;
+  gap:16px;
   flex-wrap:wrap;
 }
 
-.legend{ display:flex; gap:8px; flex-wrap:wrap; }
-.pill{
-  font-size:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--card);
-  color:var(--fg);
+.legend{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
-.pill-meal{ border-color:color-mix(in oklab, var(--meal), #000 70%); }
-.pill-studio{ border-color:color-mix(in oklab, var(--studio), #000 70%); }
-.pill-admin{ border-color:color-mix(in oklab, var(--admin), #000 70%); }
-.pill-deadline{ border-color:color-mix(in oklab, var(--deadline), #000 70%); }
-.pill-life{ border-color:color-mix(in oklab, var(--life), #000 70%); }
 
-.note{ color:var(--muted); font-size:12px; }
+.pill{
+  font-size:13px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:var(--card);
+  border:1px solid var(--line);
+}
+
+.pill-meal{ border-color:var(--meal); }
+.pill-studio{ border-color:var(--studio); }
+.pill-admin{ border-color:var(--admin); }
+.pill-deadline{ border-color:var(--deadline); }
+.pill-life{ border-color:var(--life); }
+
+.note{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width:900px){
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:500px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
