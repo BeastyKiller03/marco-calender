@@ -2,28 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>January 2026 – Marco Planner</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Marco + Jess — Calendar</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="top">
-    <h1>January 2026</h1>
-    <div class="legend">
-      <span class="pill studio">Whittier</span>
-      <span class="pill admin">Verre Admin</span>
-      <span class="pill meal">Meal Prep</span>
-      <span class="pill deadline">Deadline</span>
-      <span class="pill life">Life / Reset</span>
-    </div>
-  </header>
+  <div class="wrap">
+    <header class="top">
+      <div class="title">
+        <div class="h1">Calendar</div>
+        <div class="sub">Marco + Jess • recurring routines + deadlines</div>
+      </div>
 
-  <main>
-    <section class="grid" id="calendar">
-      <!-- JS injects days here -->
-    </section>
-  </main>
+      <div class="controls">
+        <button id="prevBtn" class="btn" type="button">← Prev</button>
+        <div id="monthLabel" class="monthLabel">—</div>
+        <button id="nextBtn" class="btn" type="button">Next →</button>
+      </div>
+    </header>
 
+    <main>
+      <div class="dow">
+        <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <footer class="footer">
+        <div class="legend">
+          <span class="pill pill-meal">Meal</span>
+          <span class="pill pill-studio">Studio</span>
+          <span class="pill pill-admin">Verre Admin</span>
+          <span class="pill pill-deadline">Deadline</span>
+          <span class="pill pill-life">Life</span>
+        </div>
+
+        <div class="note">
+          Edit recurring weekly routines in <code>rules.js</code> and one-off events in <code>events.js</code>.
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="rules.js"></script>
   <script src="events.js"></script>
   <script src="app.js"></script>
 </body>
