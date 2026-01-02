@@ -9,6 +9,7 @@ window.EVENTS = [
 
   // Joint accounts mid-January
   { date: "2026-01-14", type: "life", title: "Set up joint checking + joint savings (you + Jess)" },
+  { date: "2026-01-10", type: "deadline", title: "Sammy photos deadline" },
 
   // Content deadlines
   { date: "2026-01-15", type: "deadline", title: "Create email list system draft (Verre + Gaming site)" },
