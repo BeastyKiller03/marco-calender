@@ -6,35 +6,32 @@ const monthNames = [
   "July","August","September","October","November","December"
 ];
 
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
 function pad2(n){ return String(n).padStart(2, "0"); }
 
-function toISODate(d){
-  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+function isoFromParts(y,m,d){ // m is 0-11
+  return `${y}-${pad2(m+1)}-${pad2(d)}`;
 }
 
-function startOfMonth(year, monthIndex){
-  return new Date(year, monthIndex, 1);
+function toISODate(dateObj){
+  return isoFromParts(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
 }
 
-function endOfMonth(year, monthIndex){
-  return new Date(year, monthIndex + 1, 0);
+function dateAtNoon(y,m,d){
+  return new Date(y, m, d, 12, 0, 0);
 }
 
-// Create a date at local noon to avoid timezone edge weirdness
-function dateAtNoon(year, monthIndex, day){
-  return new Date(year, monthIndex, day, 12, 0, 0);
-}
+function startOfMonth(y,m){ return new Date(y, m, 1); }
+function endOfMonth(y,m){ return new Date(y, m + 1, 0); }
 
-function buildMap(){
+function buildOneOffMap(){
   const map = new Map();
-
-  // One-off events by date
   (window.EVENTS || []).forEach(ev => {
     if(!ev?.date) return;
     if(!map.has(ev.date)) map.set(ev.date, []);
     map.get(ev.date).push(ev);
   });
-
   return map;
 }
 
@@ -42,19 +39,25 @@ function eventsForDate(d, oneOffMap){
   const iso = toISODate(d);
   const out = [];
 
-  // Add recurring rules
-  const dow = d.getDay(); // 0=Sun
+  // Recurring rules
+  const dow = d.getDay();
   (window.RULES || []).forEach(rule => {
     if(rule?.dow === dow){
-      out.push({ date: iso, type: rule.type || "life", title: rule.title || "—", recurring:true });
+      out.push({
+        date: iso,
+        type: rule.type || "life",
+        emoji: rule.emoji || "",
+        title: rule.title || "—",
+        recurring: true
+      });
     }
   });
 
-  // Add one-off events
+  // One-off events
   const ones = oneOffMap.get(iso) || [];
   ones.forEach(e => out.push({ ...e, recurring:false }));
 
-  // Small sort: deadlines first, then studio/admin/meal/life
+  // Sort: deadlines first
   const rank = (t) => ({
     deadline: 1,
     studio: 2,
@@ -67,35 +70,61 @@ function eventsForDate(d, oneOffMap){
   return out;
 }
 
-function renderMonth(year, monthIndex){
-  const grid = $("#grid");
-  const label = $("#monthLabel");
-  const oneOffMap = buildMap();
+// ----- Notes storage (per device) -----
+const NOTES_KEY = "planner_notes_v1";
+function loadAllNotes(){
+  try{
+    return JSON.parse(localStorage.getItem(NOTES_KEY) || "{}");
+  }catch{
+    return {};
+  }
+}
+function saveAllNotes(obj){
+  localStorage.setItem(NOTES_KEY, JSON.stringify(obj));
+}
 
-  label.textContent = `${monthNames[monthIndex]} ${year}`;
+function formatSideLabel(iso){
+  // iso: YYYY-MM-DD
+  const [y,mm,dd] = iso.split("-").map(Number);
+  const d = new Date(y, mm-1, dd, 12, 0, 0);
+  return `${monthNames[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} (${DOW[d.getDay()]})`;
+}
+
+// ----- Calendar state -----
+let viewYear = 2026;
+let viewMonth = 0; // January
+let selectedISO = null;
+
+function renderMonth(y, m){
+  const grid = $("#grid");
+  const monthLabel = $("#monthLabel");
+  const oneOffMap = buildOneOffMap();
+
+  monthLabel.textContent = `${monthNames[m]} ${y}`;
   grid.innerHTML = "";
 
-  const first = startOfMonth(year, monthIndex);
-  const last = endOfMonth(year, monthIndex);
+  const first = startOfMonth(y, m);
+  const last = endOfMonth(y, m);
 
-  // We show a Sun-Sat grid. Determine how many "leading" days from previous month.
-  const leading = first.getDay(); // 0=Sun, 4=Thu, etc.
+  const leading = first.getDay(); // 0=Sun
+  const totalCells = 42; // 6-week grid
+  const start = dateAtNoon(y, m, 1 - leading);
 
-  // Total cells: 6 weeks = 42 is standard and simple
-  const totalCells = 42;
-
-  // Starting date is first minus leading days
-  const start = dateAtNoon(year, monthIndex, 1 - leading);
+  // today ISO (based on device clock)
+  const todayISO = toISODate(new Date());
 
   for(let i=0; i<totalCells; i++){
     const d = new Date(start);
     d.setDate(start.getDate() + i);
 
-    const inMonth = d.getMonth() === monthIndex;
+    const inMonth = d.getMonth() === m;
     const iso = toISODate(d);
 
     const cell = document.createElement("div");
     cell.className = "cell" + (inMonth ? "" : " muted");
+
+    if(iso === todayISO) cell.classList.add("today");
+    if(selectedISO && iso === selectedISO) cell.classList.add("selected");
 
     const dateRow = document.createElement("div");
     dateRow.className = "dateRow";
@@ -106,7 +135,7 @@ function renderMonth(year, monthIndex){
 
     const badge = document.createElement("div");
     badge.className = "badge";
-    badge.textContent = inMonth ? "" : `${monthNames[d.getMonth()].slice(0,3)}`;
+    badge.textContent = inMonth ? "" : monthNames[d.getMonth()].slice(0,3);
 
     dateRow.appendChild(dayNum);
     dateRow.appendChild(badge);
@@ -118,43 +147,84 @@ function renderMonth(year, monthIndex){
     evs.forEach(ev => {
       const div = document.createElement("div");
       div.className = `item ${ev.type || "life"}`;
-      div.textContent = ev.title;
+      div.textContent = `${ev.emoji ? ev.emoji + " " : ""}${ev.title}`;
       items.appendChild(div);
     });
 
     cell.appendChild(dateRow);
     cell.appendChild(items);
 
-    // Optional: click-to-copy ISO date (nice for adding events quickly)
-    cell.title = iso;
+    // Click to select day + open notes
+    cell.addEventListener("click", () => {
+      selectDay(iso);
+      // re-render to show selected outline
+      renderMonth(viewYear, viewMonth);
+    });
 
     grid.appendChild(cell);
   }
 }
 
+function selectDay(iso){
+  selectedISO = iso;
+  const label = $("#selectedDateLabel");
+  const notesBox = $("#notesBox");
+
+  label.textContent = formatSideLabel(iso);
+
+  const all = loadAllNotes();
+  notesBox.value = all[iso] || "";
+
+  notesBox.focus();
+}
+
+// Auto-save notes as you type
+function bindNotes(){
+  const notesBox = $("#notesBox");
+  notesBox.addEventListener("input", () => {
+    if(!selectedISO) return;
+    const all = loadAllNotes();
+    all[selectedISO] = notesBox.value;
+    saveAllNotes(all);
+  });
+
+  $("#clearNotesBtn").addEventListener("click", () => {
+    if(!selectedISO) return;
+    const all = loadAllNotes();
+    delete all[selectedISO];
+    saveAllNotes(all);
+    notesBox.value = "";
+  });
+}
+
 function init(){
-  // Default to Jan 2026 (your request)
-  let viewYear = 2026;
-  let viewMonth = 0; // January
-
-  const prevBtn = $("#prevBtn");
-  const nextBtn = $("#nextBtn");
-
-  const rerender = () => renderMonth(viewYear, viewMonth);
-
-  prevBtn.addEventListener("click", () => {
+  // Buttons
+  $("#prevBtn").addEventListener("click", () => {
     viewMonth -= 1;
     if(viewMonth < 0){ viewMonth = 11; viewYear -= 1; }
-    rerender();
+    renderMonth(viewYear, viewMonth);
   });
 
-  nextBtn.addEventListener("click", () => {
+  $("#nextBtn").addEventListener("click", () => {
     viewMonth += 1;
     if(viewMonth > 11){ viewMonth = 0; viewYear += 1; }
-    rerender();
+    renderMonth(viewYear, viewMonth);
   });
 
-  rerender();
+  $("#printBtn").addEventListener("click", () => {
+    window.print();
+  });
+
+  bindNotes();
+
+  // Default view: January 2026
+  renderMonth(viewYear, viewMonth);
+
+  // Default select "today" if it's within the view month; otherwise select Jan 1
+  const today = new Date();
+  const todayISO = toISODate(today);
+  const inView = (today.getFullYear() === viewYear && today.getMonth() === viewMonth);
+  selectDay(inView ? todayISO : isoFromParts(viewYear, viewMonth, 1));
 }
 
 init();
