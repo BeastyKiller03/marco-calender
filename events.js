@@ -5,7 +5,7 @@ window.EVENTS = [
   // Jan 2026: starts Thu 1st and ends Sat 31st (this calendar will render it correctly)
 
   // Reset / clean
-  { date: "2026-01-03", type: "life", title: "Reset clean: deep clean car + living room (move/sell furniture)" },
+  { date: "2026-01-06", type: "life", title: "Reset clean: deep clean car + living room (move/sell furniture)" },
 
   // Joint accounts mid-January
   { date: "2026-01-14", type: "life", title: "Set up joint checking + joint savings (you + Jess)" },
