@@ -14,7 +14,7 @@ window.RULES = [
   { dow: 5, type: "admin", title: "Verre admin catch-up" },
 
   // Rehearsal day (you can change this to any day)
-  { dow: 6, type: "life", title: "Live rehearsal (short run-through)" },
+  { dow: 2, type: "life", title: "Live rehearsal (short run-through)" },
 
   // Optional: club planning / scene nights (you mentioned Thu + Sun)
   { dow: 4, type: "life", title: "Club night / scene research (optional)" },
